@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <string.h>
+typedef struct _stack
+{   
+    int arr[10000];
+    int top;
+}Stack;
+
+void StackInit(Stack* pstack) {
+    pstack->top = -1;
+}
+
+void push(Stack* pstack, int data) {
+    pstack->top += 1;
+    pstack->arr[pstack->top] = data;
+}
+
+int pop(Stack* pstack) {
+    if (pstack->top == -1) 
+        return -1;
+    int data;
+    data = pstack->arr[pstack->top];
+    pstack->top -= 1;
+    return data;
+}
+
+int size(Stack* pstack) {
+    return pstack->top + 1;
+}
+
+int empty(Stack* pstack) {
+    if (pstack->top == -1) 
+        return 1;
+    else 
+        return 0;
+}
+
+int top(Stack* pstack) {
+    if (pstack->top == -1) return -1;
+    else return pstack->arr[pstack->top];
+}
+
+int main(){
+    int n;
+    scanf("%d", &n);
+    getchar();
+
+    char str[12];
+    Stack stack;
+    StackInit(&stack);
+
+    for(int i = 0; i < n; i++) {
+        scanf("%s", &str);
+
+        if (strcmp(str, "push") == 0) {
+            int num;
+            scanf("%d", &num);
+            push(&stack, num);
+
+        }
+        else if(strcmp(str, "pop") == 0) {
+            printf("%d\n",pop(&stack));
+        }
+        else if(strcmp(str, "size") == 0) {
+            printf("%d\n",size(&stack));
+        }
+        else if(strcmp(str, "empty") == 0) {
+            printf("%d\n",empty(&stack));
+        }
+        else if(strcmp(str, "top") == 0) {
+            printf("%d\n",top(&stack));
+        }
+    }
+
+    
+}
