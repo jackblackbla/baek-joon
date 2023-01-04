@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <string.h>
+#pragma warning(disable:4996)
+typedef struct _stack {
+    char arr[100];
+    int top;
+    int cnt;
+}Stack;
+
+void StackInit(Stack* pstack) {
+    pstack->top = -1;
+    pstack->cnt = 0;
+}
+
+int isEmpty(Stack* pstack) {
+    if (pstack->cnt == 0) return 1;
+    else return 0;
+}
+
+void push(Stack* pstack, int data) {
+    pstack->top += 1;
+    pstack->arr[pstack->top] = data;
+    pstack->cnt += 1;
+}
+
+int pop(Stack* pstack) {
+    int data;
+    pstack->cnt -= 1;
+
+    if (isEmpty(pstack)) {
+        return -1;
+    }
+    data = pstack->arr[pstack->top];
+    pstack->top -= 1;
+
+    return data;
+
+}
+
+
+
+int main(void) {
+    Stack stack1;
+    Stack stack2;
+    
+    
+    while (1) {    
+        char str[100];
+        StackInit(&stack1);
+        StackInit(&stack2);
+        scanf("%[^\n]s", &str);
+        if (str[0] == 46) {
+            printf("yes");
+            break;}
+        getchar();
+
+        for (int i = 0; i < strlen(str); i++) {
+            if (str[i] == 40) {
+                push(&stack1, str[i]);
+            }
+            else if (str[i] == 41) {
+                pop(&stack1);
+            }
+
+            else if (str[i] == 91) {
+                push(&stack2, str[i]);
+            }
+            else if (str[i] == 93) {
+                pop(&stack2);
+            }
+        }
+
+        if (isEmpty(&stack1) && isEmpty(&stack2)) {
+            printf("yes\n");
+        }
+        else printf("no\n");
+        
+    }
+}
