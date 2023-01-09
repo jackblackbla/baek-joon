@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+#pragma warning(disable:4996)
+#define SIZE 500000
+
+
+
+int main(void) {
+    int arr[SIZE];
+    int n;
+    int front = 0, rear;
+
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        arr[i] = i + 1;
+    }
+    rear = n - 1;
+
+    while (1) {
+        if (front == rear) {
+            break;
+        }
+        front = (front + 1) % n;
+        rear += 1;
+        if (rear == n) rear = 0;
+        arr[rear] = arr[front];
+        front = (front + 1) % n;
+        if (front == rear) {
+            break;
+        }
+    }
+    printf("%d", arr[rear]);
+}
