@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define STR_LEN 200000
+
+typedef struct _stack {
+    int stackArr[100000];
+    int topIdx;
+}Stack;
+
+void StackInit(Stack* stack) {
+    stack->topIdx = -1;
+}
+
+void Push(Stack* stack, int data) {
+    stack->topIdx += 1;
+    stack->stackArr[stack->topIdx] = data;
+}
+
+int Pop(Stack* stack) {
+    int rIdx;
+
+    rIdx = stack->topIdx;
+    stack->topIdx -= 1;
+    return stack->stackArr[rIdx];
+}
+
+int Peek(Stack* stack) {
+    
+    return stack->stackArr[stack->topIdx];
+}
+
+
+int main(void) {
+    char str[STR_LEN];
+    Stack stack;
+    StackInit(&stack);
+    int n, num;
+    scanf("%d", &n);
+    int pushcnt = 0;
+    int tf = 1;
+    int idx = 0;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &num);
+
+        if (pushcnt < num) {
+            for (int k = pushcnt; k < num;k++) {
+                pushcnt += 1;
+                Push(&stack, pushcnt);
+                str[idx++] = '+';
+            }
+            Pop(&stack);
+            str[idx++] = '-';
+        }
+        else if(pushcnt > num) {
+            if (Peek(&stack) != num) {
+                tf = 0;
+            }
+            else{
+            Pop(&stack);
+            str[idx++] = '-';
+            }
+        }
+        
+    }
+    if (tf == 0) {
+        printf("NO");
+    }
+    else if (tf == 1) {
+        for (int i = 0; i < idx; i++) {
+            printf("%c\n", str[i]);
+        }
+    }
+}
