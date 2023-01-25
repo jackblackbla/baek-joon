@@ -1,0 +1,70 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct _node {
+    int data;
+    struct _node* next;
+
+}Node;
+
+typedef struct _queue {
+    Node* front;
+    Node* rear;
+    int numofData;
+}Queue;
+
+void QueueInit(Queue* q) {
+    q->front = NULL;
+    q->rear = NULL;
+    q->numofData = 0;
+}
+
+void Enqueue(Queue* q, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->next = NULL;
+    newNode->data = data;
+
+
+    if (q->front == NULL) {
+        q->front = newNode;
+        q->rear = newNode;
+    }
+    else {
+        q->rear->next = newNode;
+        q->rear = newNode;
+    }
+    (q->numofData)++;
+}
+
+int Dequeue(Queue* q) {
+    int data;
+    Node* delNode;
+
+    delNode = q->front;
+    data = delNode->data;
+    q->front = q->front->next;
+    free(delNode);
+    (q->numofData)--;
+    return data;
+}
+
+
+int main(void) {
+    int n, k;
+    scanf("%d %d", &n, &k);
+
+    Queue q;
+    QueueInit(&q);
+
+    for (int i = 1; i <= n; i++) {
+        Enqueue(&q, i);
+    }
+    printf("<");
+    while(q.numofData > 1) {
+        for (int i = 0; i < k - 1; i++) {
+            Enqueue(&q, Dequeue(&q));
+        }
+        printf("%d, ", Dequeue(&q));
+    }
+    printf("%d>", Dequeue(&q));
+}
