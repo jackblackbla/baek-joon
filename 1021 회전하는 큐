@@ -1,0 +1,183 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
+typedef struct _node {
+    int data;
+    struct _node* next;
+    struct _node* prev;
+}Node;
+
+typedef struct _deque{
+    Node* front;
+    Node* rear;
+    int numofData;
+}Deque;
+
+void DequeInit(Deque* deq) {
+    deq->front = NULL;
+    deq->rear = NULL;
+    deq->numofData = 0;
+}
+
+int IsEmpty(Deque* deq) {
+    if (deq->front == NULL) 
+        return 1;
+    else 
+        return 0;
+}
+
+int GetSize(Deque* deq) {
+    return deq->numofData;
+}
+
+void PushFront(Deque* deq, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->next = deq->front; 
+    newNode->data = data;
+
+    if (IsEmpty(deq)) {
+        deq->rear = newNode;
+    }
+    else {
+        deq->front->prev = newNode;
+    }
+    deq->front = newNode;
+    newNode->prev = deq->rear;
+
+    (deq->numofData)++;
+}
+
+void PushBack(Deque* deq, int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->next = deq->front;
+    newNode->data = data;
+
+    if (IsEmpty(deq)) {
+        deq->front = newNode;
+    }
+    else {
+        deq->front->prev = newNode;
+        deq->rear->next = newNode;
+    }
+    newNode->prev = deq->rear;
+    deq->rear = newNode;
+    (deq->numofData)++;
+}
+
+int PopFront(Deque* deq) {
+    int data;
+    Node* delNode = deq->front;
+
+    if (IsEmpty(deq)) {
+        return -1;
+    }
+    
+    data = deq->front->data;
+    deq->front = deq->front->next;
+
+    free(delNode);
+    if (deq->front == NULL) {
+        deq->rear = NULL;
+    }
+    else {
+        deq->front->prev = deq->rear;
+    }
+    deq->numofData -= 1;
+    return data;
+
+    
+}
+
+int PopBack(Deque* deq) {
+    int data;
+    Node* delNode = deq->rear;
+
+    if (IsEmpty(deq)) {
+        return -1;
+    }
+    
+    data = deq->rear->data;
+    deq->rear = deq->rear->prev;
+
+    free(delNode);
+    if (deq->rear == NULL) {
+        deq->front = NULL;
+    }
+    else {
+        deq->rear->next = deq->front;
+    }
+    deq->numofData -= 1;
+    return data;
+    
+}
+
+int Front(Deque* deq) {
+    if (IsEmpty(deq)) 
+        return -1;
+    else {
+        return deq->front->data;
+    }
+}
+
+int Back(Deque* deq) {
+    if (IsEmpty(deq)) 
+        return -1;
+    else 
+        return deq->rear->data;
+
+}
+
+void MoveLeft(Deque* deq) {
+    int data = PopFront(deq);
+    PushBack(deq, data);
+}
+
+void MoveRight(Deque* deq) {
+    int data =PopBack(deq);
+    PushFront(deq, data);
+}
+
+
+
+int main(void) {
+    int n, m;
+    Deque deq;
+    DequeInit(&deq);
+    int num;
+    int total = 0;
+    scanf("%d %d", &n, &m);
+    for(int i = 1; i <= n; i++) {
+        PushBack(&deq, i);
+    }
+    for (int i = 0; i < m; i++){
+        scanf("%d", &num);
+        Node* ptr = deq.front;
+        int cntr = 0, cntl = 0;
+        while (1) {
+            if (ptr->data == num)
+                break;
+            cntr += 1;
+            ptr = ptr->next;
+        }
+        cntl = deq.numofData - cntr;
+        if (cntr < cntl) {
+            total += cntr;
+            for (int i = 0; i < cntr; i++) {
+                MoveLeft(&deq);
+            }
+
+        }
+        else {
+            for (int i = 0; i < cntl; i++) {
+                MoveRight(&deq);
+            }
+            total += cntl;
+        }
+        PopFront(&deq);
+
+    }
+    printf("%d", total);
+
+}
