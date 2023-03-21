@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+using namespace std;
+int arr[100001];
+int n, m;
+void binary_search(int target) {
+    int low = 0;
+    int high = n - 1;
+    int mid;
+    while (low <= high) {
+        mid = (low + high) / 2;
+        if (arr[mid] == target) {
+            cout << "1" << "\n";
+            return;
+        }
+        else if (arr[mid] < target) {
+            low = mid + 1;
+        }
+        else {
+            high = mid - 1;
+        }
+    }
+    cout << "0" << "\n";
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    cin >> n;
+    int temp;
+    for (int i = 0; i < n; i++) {
+        cin >> temp;
+        arr[i] = temp;
+    }
+    cin >> m;
+    sort(arr, arr + n);
+    for (int i = 0; i < m; i++) {
+        cin >> temp;
+        binary_search(temp);
+
+    }
+}
