@@ -1,0 +1,38 @@
+#include <iostream>
+#include "algorithm"
+using namespace std;
+int arr[1000000];
+int main() {
+    int n, m;
+    int temp;
+    cin >> n >> m;
+
+    for (int i = 0; i < n; i++) {
+        cin >> temp;
+        arr[i] = temp;
+    }
+
+    sort(arr, arr + n);
+
+    int low, high;
+
+    low = 1, high = arr[n - 1];
+
+    while (low <= high) {
+        long long sum = 0;
+        int mid = (low + high) / 2;
+        for (int i = 0; i < n; i++) {
+            if (mid <= arr[i]) {
+                sum += arr[i] - mid;
+            } else
+                continue;
+        }
+        // 합이 정답보다 크다 -> 높이를 더 높일 수 있다 ->
+        if (sum >= m) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    cout << high;
+}
