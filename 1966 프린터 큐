@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    int n, m;
+    int temp;
+    for (int i = 0; i < t; i++){
+        int cnt = 1;
+        cin >> n >> m;
+        queue<int> q;
+        int arr[n];
+        for (int k = 0; k < n; k++) {
+            cin >> temp;
+            q.push(temp);
+            arr[k] = temp;
+        }
+        sort(arr, arr + n);
+        while (true) {
+//최댓값보다 현재값이 작음 -> 뒤로 넘김
+            if (arr[n - 1] != q.front()) {
+                q.push(q.front());
+                q.pop();
+                if (m != 0) {
+                    m -= 1;
+                } else {
+                    m = q.size() - 1;
+                }
+            }
+//츨력
+            else {
+                //출력 할 값이 정답이 아닐때 -> 최댓값만 출력
+                if (m != 0) {
+                    q.pop();
+                    m -= 1;
+                    n -= 1;
+                    cnt += 1;
+                }
+                    //출력 할 값이 정답일때
+                else {
+                    q.pop();
+                    cout << cnt << "\n";
+                    break;
+                }
+            }
+        }
+    }
+}
