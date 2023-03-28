@@ -1,0 +1,44 @@
+#include <iostream>
+#include <algorithm>
+#include <climits>
+using namespace std;
+
+int arr[501][501];
+
+int main() {
+    int n, m, b;
+    cin >> n >> m >> b;
+
+    int min_height = INT_MAX, max_height = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> arr[i][j];
+            min_height = min(min_height, arr[i][j]);
+            max_height = max(max_height, arr[i][j]);
+        }
+    }
+
+    int min_time = INT_MAX;
+    int max_height_sum = 0;
+    for (int k = min_height; k <= max_height; k++) {
+        int time = 0, blocks = b;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int diff = arr[i][j] - k;
+                if (diff < 0) {
+                    time += -diff;
+                    blocks += -diff;
+                } else {
+                    time += 2 * diff;
+                    blocks += diff;
+                }
+            }
+        }
+        if (blocks >= 0 && min_time >= time) {
+            min_time = time;
+            max_height_sum = k;
+        }
+    }
+    cout << min_time << " " << max_height_sum << "\n";
+    return 0;
+}
